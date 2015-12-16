@@ -33,7 +33,6 @@ function main(container, portal) {
     $("#loadData").click(function() {
         console.log("Loading data");
         $("#dataBody").children().remove();
-        $('#loadingData').text("Loading Data ...");
 
         deviceAlias = $("#deviceSelect").find(":selected").attr("alias");
         dataportAlias = $("#dataportSelect").find(":selected").attr("alias");
@@ -54,6 +53,8 @@ function main(container, portal) {
 
         if (isNaN(startTime) || isNaN(endTime)) {
           alert("Please enter start and/or end times in format YYYY-MM-DD.");
+        } else if (endTime < startTIme) {
+          alert("Please enter an end time that is before the start time.")
         }
 
         $("#timestamp").text("Time - "+devices[deviceAlias].timezone);
@@ -65,15 +66,16 @@ function main(container, portal) {
         var numIterations = (secs_diff/200) + 1;
         console.log("numIterations: " + numIterations);
 
+        $('#loadingData').show().text("Creating Data Request ...");
         promiseArray = makePromises(deviceAlias, dataportAlias, numIterations, startTime);
         console.log("promiseArray after makePromises: ", promiseArray);
 
+        $('#loadingData').show().text("Loading Data ...");
         keepPromises(startTime, promiseArray, endTime);
       });
 
       function makePromises(deviceAlias, dataportAlias, numIterations, startTime) {
         console.log("Making promises...");
-        $('#loadingData').text("Creating Data Request ...");
 
         var tempArray = [];
         for (var k=0; k<numIterations; k++) {
@@ -81,7 +83,6 @@ function main(container, portal) {
             //Advance both call start and end by 200 seconds if not the first call
             newCallStart += 200;
             newCallEnd += 200;
-            $('#loadingData').toggle();
           } else {
             //If first call, set up start time and end time to be the set start + 0 - 199
             newCallStart = startTime;
@@ -101,7 +102,7 @@ function main(container, portal) {
 
       function keepPromises(callStartTime, promiseArray, endTime) {
         Promise.all(promiseArray).then(function(result) {
-          $('#loadingData').text("Printing results...");
+          $('#loadingData').text("Printing results...").show();
           console.log("result of Promise.all: ", result);
           var resultLength = result.length;
           console.log("resultLength: ", resultLength);
@@ -115,7 +116,6 @@ function main(container, portal) {
               if (stamp > endTime) {
                 console.log("Stamp > endTime, skipping");
               } else {
-                $('#loadingData').toggle();
                 $("#dataBody").append("<tr><td class='timestamp'>"+moment(stamp*1000).tz(timezone).format('YYYY-MM-DD HH:mm:ss')+"</td><td class='datapoint'>"+dat+"</td></tr>");
               }
             });
