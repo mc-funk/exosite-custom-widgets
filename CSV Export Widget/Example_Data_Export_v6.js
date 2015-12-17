@@ -1,3 +1,9 @@
+//Exosite CSV Data Export Example Widget
+//Version 2.0
+// Version 1 developed by Andres Solz
+// Upgrades to remove deprecated functions of moment.js, handle timezone issues, and other changes by Michelle Funk
+// Version 2, changing call to array of promises with 1 call per 200 seconds to eliminate Widget API data cap issues, by Michelle Funk
+
 function main(container, portal) {
 
     selects = "<div id='selects'><span>Device: </span><select id='deviceSelect'></select><br><span> Dataport: </span><select id='dataportSelect'></select><br><input class='inputs' id='startTime' placeholder='Start: (YYYY-MM-DD)' type='text'><input class='inputs' id='endTime'  placeholder='YYYY-MM-DD' type='text'><button id='loadData'>Load</button><a class='exportcsv' href='#' id='exportCSV'>Export CSV</a></div>";
