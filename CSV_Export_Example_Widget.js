@@ -59,7 +59,7 @@ function main(container, portal) {
 
         if (isNaN(startTime) || isNaN(endTime)) {
           alert("Please enter start and/or end times in format YYYY-MM-DD.");
-        } else if (endTime < startTIme) {
+        } else if (endTime < startTime) {
           alert("Please enter an end time that is before the start time.")
         }
 
